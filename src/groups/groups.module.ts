@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Group } from './domain/group.entity';
 import { GroupMember } from './domain/group-member.entity';
@@ -10,7 +10,9 @@ import { GroupController } from './interface/group.controller';
 import { GroupMemberController } from './interface/group-member.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Group, GroupMember])],
+  imports: [
+    TypeOrmModule.forFeature([Group, GroupMember])
+  ],
   controllers: [GroupController, GroupMemberController],
   providers: [
     GroupService,

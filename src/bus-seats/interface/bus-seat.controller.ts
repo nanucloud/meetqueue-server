@@ -6,8 +6,7 @@ import { AssignSeatDto } from '../application/dto/assign-seat.dto';
 import { BatchCreateSeatsDto } from '../application/dto/batch-create-seats.dto';
 import { BusSeat } from '../domain/bus-seat.entity';
 import { AccessTokenGuard } from '../../auth/infrastructure/access-token.guard';
-import { Roles } from '../../auth/infrastructure/roles.decorator';
-import { Role } from '../../auth/infrastructure/roles.decorator';
+import { Role } from '../../auth/infrastructure/roles';
 
 @Controller('bus-seats')
 @UseGuards(AccessTokenGuard)
@@ -15,7 +14,6 @@ export class BusSeatController {
   constructor(private readonly busSeatService: BusSeatService) {}
 
   @Get()
-  @Roles(Role.USER)
   async findAll(
     @Query('scheduleId') scheduleId?: string,
     @Query('busTemplateId') busTemplateId?: string,
@@ -35,7 +33,6 @@ export class BusSeatController {
   }
 
   @Get('user-schedule')
-  @Roles(Role.USER)
   async findByUserAndSchedule(
     @Query('userId') userId: string,
     @Query('scheduleId') scheduleId: string,
@@ -44,31 +41,26 @@ export class BusSeatController {
   }
 
   @Get(':id')
-  @Roles(Role.USER)
   async findOne(@Param('id') id: string): Promise<BusSeat> {
     return this.busSeatService.findById(id);
   }
 
   @Post()
-  @Roles(Role.ADMIN)
   async create(@Body() createBusSeatDto: CreateBusSeatDto): Promise<BusSeat> {
     return this.busSeatService.create(createBusSeatDto);
   }
 
   @Post('batch')
-  @Roles(Role.ADMIN)
   async batchCreateSeats(@Body() batchCreateSeatsDto: BatchCreateSeatsDto): Promise<BusSeat[]> {
     return this.busSeatService.batchCreateSeats(batchCreateSeatsDto);
   }
 
   @Post('assign')
-  @Roles(Role.ADMIN)
   async assignSeat(@Body() assignSeatDto: AssignSeatDto): Promise<BusSeat> {
     return this.busSeatService.assignSeat(assignSeatDto);
   }
 
   @Put(':id')
-  @Roles(Role.ADMIN)
   async update(
     @Param('id') id: string,
     @Body() updateBusSeatDto: UpdateBusSeatDto,
@@ -77,19 +69,16 @@ export class BusSeatController {
   }
 
   @Delete(':id')
-  @Roles(Role.ADMIN)
   async remove(@Param('id') id: string): Promise<void> {
     return this.busSeatService.remove(id);
   }
 
   @Delete('schedule/:scheduleId')
-  @Roles(Role.ADMIN)
   async removeBySchedule(@Param('scheduleId') scheduleId: string): Promise<void> {
     return this.busSeatService.deleteBySchedule(scheduleId);
   }
 
   @Delete('bus-template/:busTemplateId')
-  @Roles(Role.ADMIN)
   async removeByBusTemplate(@Param('busTemplateId') busTemplateId: string): Promise<void> {
     return this.busSeatService.deleteByBusTemplate(busTemplateId);
   }
