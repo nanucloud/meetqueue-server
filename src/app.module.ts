@@ -8,6 +8,7 @@ import { AttendancesModule } from './attendances/attendances.module';
 import { AuthModule } from './auth/auth.module';
 import { BusTemplatesModule } from './bus-templates/bus-templates.module';
 import { BusSeatsModule } from './bus-seats/bus-seats.module';
+import { HealthModule } from './health/health.module';
 
 import { User } from './users/domain/user.entity';
 import { Group } from './groups/domain/group.entity';
@@ -43,6 +44,7 @@ import { BusSeat } from './bus-seats/domain/bus-seat.entity';
     AuthModule,
     BusTemplatesModule,
     BusSeatsModule,
+    HealthModule,
   ]
 })
 export class AppModule {}
