@@ -31,6 +31,15 @@ export class AttendanceRepository implements IAttendanceRepository {
     });
   }
 
+  async findByUserAndScheduleId(
+    userId: string,
+    scheduleId: string,
+  ): Promise<Attendance | null> {
+    return this.attendanceRepository.findOne({
+      where: { userId, scheduleId },
+    });
+  }
+
   async findByUserId(userId: string): Promise<Attendance[]> {
     return this.attendanceRepository.find({
       where: { userId },
@@ -38,7 +47,10 @@ export class AttendanceRepository implements IAttendanceRepository {
     });
   }
 
-  async findByScheduleAndUserId(scheduleId: string, userId: string): Promise<Attendance | null> {
+  async findByScheduleAndUserId(
+    scheduleId: string,
+    userId: string,
+  ): Promise<Attendance | null> {
     return this.attendanceRepository.findOne({
       where: { scheduleId, userId },
       relations: ['schedule', 'user'],
@@ -49,12 +61,22 @@ export class AttendanceRepository implements IAttendanceRepository {
     return this.attendanceRepository.save(attendance);
   }
 
-  async update(id: string, attendanceData: Partial<Attendance>): Promise<Attendance | null> {
-    await this.attendanceRepository.update({ attendanceId: id }, attendanceData);
+  async update(
+    id: string,
+    attendanceData: Partial<Attendance>,
+  ): Promise<Attendance | null> {
+    await this.attendanceRepository.update(
+      { attendanceId: id },
+      attendanceData,
+    );
     return this.findById(id);
   }
 
   async delete(id: string): Promise<void> {
     await this.attendanceRepository.delete({ attendanceId: id });
+  }
+
+  async deleteByScheduleId(scheduleId: string): Promise<void> {
+    await this.attendanceRepository.delete({ scheduleId });
   }
 }

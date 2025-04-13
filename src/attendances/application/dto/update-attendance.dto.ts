@@ -1,4 +1,5 @@
 import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import { AttendanceStatus } from 'src/attendances/domain/AttendanceStatus';
 
 export class UpdateAttendanceDto {
   @IsNumber()
@@ -11,5 +12,5 @@ export class UpdateAttendanceDto {
 
   @IsString()
   @IsOptional()
-  status?: string;
+  status?: AttendanceStatus;
 }

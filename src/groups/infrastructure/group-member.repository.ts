@@ -36,6 +36,16 @@ export class GroupMemberRepository implements IGroupMemberRepository {
     });
   }
 
+  async findAdminsByGroupId(groupId: string): Promise<GroupMember[]> {
+    return this.groupMemberRepository.find({
+      where: { 
+        groupId,
+        isAdmin: true 
+      },
+      relations: ['user'],
+    });
+  }
+
   async create(groupMember: GroupMember): Promise<GroupMember> {
     return this.groupMemberRepository.save(groupMember);
   }

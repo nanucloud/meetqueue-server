@@ -4,14 +4,23 @@ import { LoginDto, TokensDto } from '../application/dto/auth.dto';
 import { AccessTokenGuard } from '../infrastructure/access-token.guard';
 import { RefreshTokenGuard } from '../infrastructure/refresh-token.guard';
 import { Request } from 'express';
+import { UserService } from '../../users/application/user.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto): Promise<TokensDto> {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto): Promise<TokensDto & { userId: string }> {
+    const tokens = await this.authService.login(loginDto);
+    const user = await this.userService.findByEmail(loginDto.email);
+    if (!user) {
+      throw new Error('사용자를 찾을 수 없습니다');
+    }
+    return { ...tokens, userId: user.UUID };
   }
 
   @UseGuards(AccessTokenGuard)

@@ -1,6 +1,14 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Schedule } from '../../schedules/domain/schedule.entity';
 import { User } from '../../users/domain/user.entity';
+import { AttendanceStatus } from './AttendanceStatus';
 
 @Entity('tbl_attendance')
 export class Attendance {
@@ -19,10 +27,12 @@ export class Attendance {
   @Column({ type: 'datetime', nullable: true })
   attendanceTime: Date;
 
-  @Column({ type: 'varchar', length: 20, default: '미출석' })
-  status: string; // '출석', '지각', '결석', '미출석'
+  @Column()
+  status: AttendanceStatus;
 
-  @ManyToOne(() => Schedule, schedule => schedule.attendances)
+  @ManyToOne(() => Schedule, (schedule) => schedule.attendances, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'scheduleId' })
   schedule: Schedule;
 

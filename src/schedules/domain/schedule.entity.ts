@@ -32,6 +32,9 @@ export class Schedule {
   @JoinColumn({ name: 'groupId' })
   group: Group;
 
-  @OneToMany(() => Attendance, attendance => attendance.schedule)
+  @OneToMany(() => Attendance, attendance => attendance.schedule, { 
+    cascade: ['remove'], 
+    onDelete: 'CASCADE' 
+  })
   attendances: Attendance[];
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { Group } from '../domain/group.entity';
 import { IGroupRepository } from '../domain/group.repository.interface';
 
@@ -17,6 +17,21 @@ export class GroupRepository implements IGroupRepository {
 
   async findById(id: string): Promise<Group | null> {
     return this.groupRepository.findOneBy({ groupId: id });
+  }
+
+  async findByKeyword(keyword: string): Promise<Group[]> {
+    return this.groupRepository.find({
+      where: [
+        { groupName: Like(`%${keyword}%`) },
+        { description: Like(`%${keyword}%`) }
+      ]
+    });
+  }
+
+  async findPublicGroups(): Promise<Group[]> {
+    return this.groupRepository.find({
+      where: { isPublic: true }
+    });
   }
 
   async create(group: Group): Promise<Group> {

@@ -9,6 +9,15 @@ export class Group {
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   groupName: string;
+  
+  @Column({ type: 'boolean', default: false })
+  isPublic: boolean;
+  
+  @Column({ type: 'varchar', length: 8, nullable: true })
+  inviteCode: string;
+  
+  @Column({ type: 'text', nullable: true })
+  description: string;
 
   @OneToMany(() => GroupMember, groupMember => groupMember.group)
   members: GroupMember[];

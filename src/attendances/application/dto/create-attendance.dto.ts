@@ -1,4 +1,5 @@
 import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { AttendanceStatus } from 'src/attendances/domain/AttendanceStatus';
 
 export class CreateAttendanceDto {
   @IsUUID()
@@ -19,5 +20,5 @@ export class CreateAttendanceDto {
 
   @IsString()
   @IsOptional()
-  status?: string;
+  status?: AttendanceStatus;
 }
