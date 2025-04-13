@@ -170,29 +170,30 @@ export class GroupService {
    * 그룹 참가 (초대 코드 필요)
    */
   async joinGroup(joinGroupDto: JoinGroupDto, userId: string): Promise<Group> {
-    const { groupId, inviteCode } = joinGroupDto;
+    const { inviteCode } = joinGroupDto;
     
-    // 1. 그룹 존재 확인
-    const group = await this.findById(groupId);
+    const group = await this.groupRepository.findByInviteId(inviteCode);
+    if (!group) {
+      throw new NotFoundException("그룹이 존재하지 않습니다")
+    }
+
+    const groupId = group.groupId
     
-    // 2. 이미 회원인지 확인
     const existingMembership = await this.groupMemberService.findByUserAndGroupIdOrNull(userId, groupId);
     if (existingMembership) {
       throw new ConflictException('이미 그룹의 회원입니다.');
     }
     
-    // 3. 그룹이 공개되지 않은 경우 초대 코드 확인
     if (!group.isPublic) {
       if (inviteCode !== group.inviteCode) {
         throw new BadRequestException('잘못된 초대 코드입니다.');
       }
     }
     
-    // 4. 회원 추가
     const member = new GroupMember();
     member.UUID = userId;
     member.groupId = groupId;
-    member.isAdmin = false; // 기본적으로 일반 회원으로 추가
+    member.isAdmin = false;
     await this.groupMemberRepository.create(member);
     
     return group;

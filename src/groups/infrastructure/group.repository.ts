@@ -19,6 +19,11 @@ export class GroupRepository implements IGroupRepository {
     return this.groupRepository.findOneBy({ groupId: id });
   }
 
+  async findByInviteId(id: string): Promise<Group | null> {
+    return this.groupRepository.findOneBy({ inviteCode: id });
+  }
+
+
   async findByKeyword(keyword: string): Promise<Group[]> {
     return this.groupRepository.find({
       where: [

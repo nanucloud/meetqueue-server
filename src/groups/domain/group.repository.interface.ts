@@ -3,6 +3,7 @@ import { Group } from './group.entity';
 export interface IGroupRepository {
   findAll(): Promise<Group[]>;
   findById(id: string): Promise<Group | null>;
+  findByInviteId(id: string): Promise<Group | null>;
   findByKeyword(keyword: string): Promise<Group[]>;
   findPublicGroups(): Promise<Group[]>;
   create(group: Group): Promise<Group>;

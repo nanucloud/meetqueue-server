@@ -6,7 +6,7 @@ export class AttendanceResponseDto {
   attendanceTime: Date;
   status: string;
   user: {
-    UUID: string;
+    UUID?: string;
     username: string;
     email: string;
   };
@@ -18,11 +18,14 @@ export class AttendanceResponseDto {
     this.distanceFromLocation = attendance.distanceFromLocation;
     this.attendanceTime = attendance.attendanceTime;
     this.status = attendance.status;
-    this.user = {
-      UUID: attendance.user.UUID,
-      username: attendance.user.username,
-      email: attendance.user.email,
-    };
+
+    this.user = attendance.user
+      ? {
+          UUID: attendance.user.UUID,
+          username: attendance.user.username,
+          email: attendance.user.email,
+        }
+      : { username: '', email: '' };
   }
 
   static mapList(attendances: any[]): AttendanceResponseDto[] {

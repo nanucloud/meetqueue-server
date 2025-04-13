@@ -93,7 +93,6 @@ export class GroupController {
 
   @Delete(':id')
   @UseGuards(RolesGuard)
-  @Roles(Role.ADMIN)
   async remove(
     @Param('id') id: string,
     @Req() req: CustomRequest,
