@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, Req, HttpStatus } from '@nestjs/common';
 import { AttendanceService } from '../application/attendance.service';
 import { CreateAttendanceDto } from '../application/dto/create-attendance.dto';
 import { UpdateAttendanceDto } from '../application/dto/update-attendance.dto';
@@ -50,7 +50,7 @@ export class AttendanceController {
   async checkAttendance(
     @Body() checkAttendanceDto: { scheduleId: string; distance: number },
     @Req() req: CustomRequest
-  ): Promise<AttendanceResponseDto> {
+  ): Promise<HttpStatus> {
     const userId = req.user?.userId;
     if (!userId) {
       throw new Error('사용자 인증 정보가 없습니다.');
@@ -61,7 +61,7 @@ export class AttendanceController {
       userId,
       checkAttendanceDto.distance,
     );
-    return new AttendanceResponseDto(attendance);
+    return HttpStatus.OK
   }
 
   @Put(':id')

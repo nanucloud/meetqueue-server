@@ -7,13 +7,15 @@ import { AuthController } from './interface/auth.controller';
 import { UsersModule } from '../users/users.module';
 import { AccessTokenStrategy } from './infrastructure/access-token.strategy';
 import { RefreshTokenStrategy } from './infrastructure/refresh-token.strategy';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     PassportModule,
     JwtModule.register({}),
     ConfigModule,
-    UsersModule
+    UsersModule,
+    HttpModule
   ],
   controllers: [AuthController],
   providers: [
